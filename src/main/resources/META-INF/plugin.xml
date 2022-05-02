@@ -1,0 +1,60 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>com.github.DerekBum.composeSlidesPresenter</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>ComposeSlidesPresenter</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="support@jetbrains.com" url="https://www.yourcompany.com">JetBrains</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+    This is a plugin to show slides and code examples directly from for IntelliJ IDEs.
+    See plugin page on GitHub for more details.
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+
+    </extensions>
+
+    <actions>
+
+        <action id="com.example.ShowRect" class="com.github.derekbum.composeslidespresenter.ShowSlide"
+                text="Show Presentation">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+
+        </action>
+
+        <action id="NextSlide" class="com.github.derekbum.composeslidespresenter.NextSlideAction" text="Next Slide" description="Switch to next slide">
+            <keyboard-shortcut keymap="$default" first-keystroke="alt shift F12"/>
+        </action>
+        <action id="PreviousSlide" class="com.github.derekbum.composeslidespresenter.PreviousSlideAction" text="Previous Slide" description="Switch to previous slide">
+            <keyboard-shortcut keymap="$default" first-keystroke="alt shift F11"/>
+        </action>
+
+        <!--    <action id="NextSlide" class="com.example.slidespresenter.NextSlideAction" text="Next Slide" description="Switch to next slide">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt shift F12"/>
+            </action>
+            <action id="PreviousSlide" class="com.example.slidespresenter.PreviousSlideAction" text="Previous Slide" description="Switch to previous slide">
+                <keyboard-shortcut keymap="$default" first-keystroke="alt shift F11"/>
+            </action>
+            <action id="SkipNextTenSlides" class="com.example.slidespresenter.SkipNextTenSlidesAction" text="Skip Next 10 Slides" description="Skip next 10 slides">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt shift F12"/>
+            </action>
+            <action id="SkipPreviousTenSlides" class="com.example.slidespresenter.SkipPreviousTenSlidesAction" text="Skip Previous 10 Slides" description="Skip previous 10 slides">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt shift F11"/>
+            </action>
+    -->
+    </actions>
+</idea-plugin>
