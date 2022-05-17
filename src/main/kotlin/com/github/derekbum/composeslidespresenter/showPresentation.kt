@@ -1,16 +1,21 @@
 package com.github.derekbum.composeslidespresenter
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.material.Button
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposePanel
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.loadImageBitmap
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAwareAction
 import org.fife.ui.rsyntaxtextarea.FileLocation
@@ -48,29 +53,75 @@ class TextEditorDemo : JFrame() {
         textArea.syntaxEditingStyle = getSyntaxStyle(file.extension)
         textArea.tabSize = 4
         textArea.tabsEmulated = true
-        cp.preferredSize = Dimension(300, 300)
+        //cp.preferredSize = Dimension(300, 300)
         cp.layout = BorderLayout()
 
-        val incButton = JButton("+")
+        /*val incButton = JButton("+")
         incButton.addActionListener(FontIncAction())
         val decButton = JButton("-")
         decButton.addActionListener(FontDecAction())
         val saveButton = JButton("save")
-        saveButton.addActionListener(SaveEditorAction())
-
-        val buttonPanel = JPanel()
-        buttonPanel.layout = FlowLayout(FlowLayout.RIGHT)
-        buttonPanel.add(incButton)
-        buttonPanel.add(decButton)
-        buttonPanel.add(saveButton)
-        cp.add(buttonPanel, BorderLayout.SOUTH)
+        saveButton.addActionListener(SaveEditorAction())*/
 
         val sp = RTextScrollPane(textArea)
 
         sp.lineNumbersEnabled = true
         sp.isFoldIndicatorEnabled = true
 
+        val composePanel = ComposePanel().apply {
+            setSize(maximumSize.width, 200)
+            setContent {
+                Row(modifier = Modifier.fillMaxWidth()) {
+
+                    Spacer(modifier = Modifier.weight(0.001f))
+
+                    Button(onClick = { saveEditorAction() }) {
+                        Text(text = "save", style = TextStyle(fontSize = 15.sp))
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Button(onClick = { fontIncAction() }) {
+                        Text(text = "+", style = TextStyle(fontSize = 15.sp))
+                    }
+
+                    Spacer(modifier = Modifier.weight(0.001f))
+
+                    Button(onClick = { fontDecAction() }) {
+                        Text(text = "-", style = TextStyle(fontSize = 15.sp))
+                    }
+                    Spacer(modifier = Modifier.weight(0.001f))
+                }
+                /*Row(verticalAlignment = Alignment.Bottom, modifier = Modifier.fillMaxSize()) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Button(modifier = Modifier.size(width = 150.dp, height = 50.dp), onClick = { println("kek") }) {
+                        Text("button 1")
+                    }
+                    Spacer(modifier = Modifier.size(5.dp))
+                    Button(modifier = Modifier.size(width = 150.dp, height = 50.dp), onClick = { println("kek") }) {
+                        Text("button 2")
+                    }
+                }*/
+            }
+        }
+
+        //sp.add(composePanel, BorderLayout.SOUTH)
+
+        /*val buttonPanel = JPanel()
+        buttonPanel.layout = FlowLayout(FlowLayout.RIGHT)
+        buttonPanel.add(incButton)
+        buttonPanel.add(decButton)
+        buttonPanel.add(saveButton)
+        cp.add(buttonPanel, BorderLayout.SOUTH)*/
+
+
+        /*val lol = JPanel()
+        lol.layout = FlowLayout(FlowLayout.RIGHT)
+        lol.add(composePanel)*/
+
         cp.add(sp, BorderLayout.CENTER)
+
+        cp.add(composePanel, BorderLayout.SOUTH)
 
         frame.contentPane = cp
         frame.pack()
