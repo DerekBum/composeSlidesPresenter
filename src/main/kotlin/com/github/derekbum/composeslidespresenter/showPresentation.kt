@@ -1,59 +1,70 @@
 package com.github.derekbum.composeslidespresenter
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposePanel
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.loadImageBitmap
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.PlatformDataKeys
-import com.intellij.openapi.fileTypes.LanguageFileType
 import com.intellij.openapi.project.DumbAwareAction
-import com.intellij.openapi.vfs.VirtualFile
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.fife.ui.rsyntaxtextarea.FileLocation
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants
 import org.fife.ui.rsyntaxtextarea.TextEditorPane
-import java.awt.BorderLayout
-import java.awt.Dimension
-import java.awt.Toolkit
+import java.awt.*
+import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
 import java.io.File
-import java.io.IOException
 import javax.swing.*
 
-private val window = JFrame()
-private val frame = JFrame()
 
-var vf: VirtualFile? = null
+var window = JFrame()
+var frame = JFrame()
+
+private var file: File = File("")
+
+private var prevType = ""
+val textArea = TextEditorPane()
+
 
 class TextEditorDemo : JFrame() {
     init {
-        val path = "/home/tulchin/IdeaProjects/prop/src/main/kotlin/Prime.kt"
+        val path = file.toString()
 
-        val file = vf?.findFileByRelativePath("/src/main/kotlin/main.cpp") //TODO()
+        //val file = vf?.findFileByRelativePath("/src/main/kotlin/Prime.kt") //TODO()
 
-        print(file)
+        //print(file?.extension)
 
-        val kek = file?.fileType as LanguageFileType
-        val lol = kek.language
+        val currInd = presentation.frameIndex
 
-        print(lol.toString())
+        presentation.frameIndex = currInd
 
-        val textArea = TextEditorPane()
+        //val textArea = TextEditorPane()
         textArea.load(FileLocation.create(path), "UTF-8")
         val cp = JPanel()
-        textArea.syntaxEditingStyle = SyntaxConstants.SYNTAX_STYLE_KOTLIN;
+        textArea.syntaxEditingStyle = getSyntaxStyle(file.extension)
+        textArea.tabSize = 4
+        textArea.tabsEmulated = true
         cp.preferredSize = Dimension(300, 300)
         cp.layout = BorderLayout()
+
+        val incButton = JButton("+")
+        incButton.addActionListener(FontIncAction())
+        val decButton = JButton("-")
+        decButton.addActionListener(FontDecAction())
+
+        val buttonPanel = JPanel()
+        buttonPanel.layout = FlowLayout(FlowLayout.RIGHT)
+        buttonPanel.add(incButton)
+        buttonPanel.add(decButton)
+        cp.add(buttonPanel, BorderLayout.SOUTH)
+
         cp.add(JScrollPane(textArea))
+
         frame.contentPane = cp
         frame.pack()
         frame.defaultCloseOperation = DISPOSE_ON_CLOSE
@@ -62,12 +73,31 @@ class TextEditorDemo : JFrame() {
 
         frame.extendedState = MAXIMIZED_BOTH
         frame.isUndecorated = true
+
+    }
+
+}
+
+private class FontIncAction : ActionListener {
+    override fun actionPerformed(e: ActionEvent) {
+        val font: Font = textArea.font
+        val size: Float = font.size + 1.0f
+        textArea.font = font.deriveFont(size)
+    }
+}
+
+private class FontDecAction : ActionListener {
+    override fun actionPerformed(e: ActionEvent) {
+        val font: Font = textArea.font
+        val size: Float = font.size - 1.0f
+        textArea.font = font.deriveFont(size)
     }
 }
 
 @Composable
-@Preview
-fun App(localFile: VirtualFile?) {
+fun App() {
+
+    //val imagePath by remember { presentationSlidePath }
 
     MaterialTheme {
 
@@ -76,12 +106,13 @@ fun App(localFile: VirtualFile?) {
             val imageModifier = Modifier
                 .fillMaxSize()
 
-            val imagePath = localFile.toString().removePrefix("file://")
+            val imageBitmap: ImageBitmap = remember(presentationSlidePath.value) {
+                loadImageBitmap(presentationSlidePath.value.inputStream())
+            }
 
-            AsyncImage(
-                load = { loadImageBitmap(File(imagePath)) },
-                painterFor = { remember { BitmapPainter(it) } },
-                contentDescription = "Sample",
+            Image(
+                painter = BitmapPainter(image = imageBitmap),
+                contentDescription = "Slide",
                 modifier = imageModifier
             )
         }
@@ -89,50 +120,18 @@ fun App(localFile: VirtualFile?) {
     }
 }
 
-@Composable
-fun <T> AsyncImage(
-    load: suspend () -> T,
-    painterFor: @Composable (T) -> Painter,
-    contentDescription: String,
-    modifier: Modifier = Modifier,
-    contentScale: ContentScale = ContentScale.Fit,
-) {
-    val image: T? by produceState<T?>(null) {
-        value = withContext(Dispatchers.IO) {
-            try {
-                load()
-            } catch (e: IOException) {
-                // instead of printing to console, you can also write this to log,
-                // or show some error placeholder
-                e.printStackTrace()
-                null
-            }
-        }
-    }
-
-    if (image != null) {
-        Image(
-            painter = painterFor(image!!),
-            contentDescription = contentDescription,
-            contentScale = contentScale,
-            modifier = modifier
-        )
-    }
-}
-
-fun loadImageBitmap(file: File): ImageBitmap =
-    file.inputStream().buffered().use(::loadImageBitmap)
-
 class ShowSlide: DumbAwareAction() {
 
-    //override fun actionPerformed(event: AnActionEvent) = BrowserUtil.browse("https://www.10bis.co.il/")
     override fun actionPerformed(e: AnActionEvent) {
 
-        vf = e.getData(PlatformDataKeys.PROJECT_FILE_DIRECTORY)
+        //vf = e.getData(PlatformDataKeys.PROJECT_FILE_DIRECTORY)
 
         //val file = vf?.findFileByRelativePath("/slid/slide1.jpg")
 
-        val file = vf?.findFileByRelativePath("/slid/slide1.jpg")
+        //val path = vf?.findFileByRelativePath("/slid/slide1.jpg")
+
+        //file = File(path.toString().removePrefix("file://"))
+        file = File(presentation.slides[presentation.index])
 
         //val psiFile = PsiManager.getInstance(e.project!!).findFile(file!!)
 
@@ -144,31 +143,62 @@ class ShowSlide: DumbAwareAction() {
 
         //print(file.toString().removePrefix("file://"))
 
-        if (true) {
+        /*window[presentation.windowIndex].addWindowListener(object : WindowAdapter() {
+            override fun windowClosed(windowEvent: WindowEvent) {
+                presentationOpened = false
+            }
+        })
+
+        frame[presentation.frameIndex].addWindowListener(object : WindowAdapter() {
+            override fun windowClosed(windowEvent: WindowEvent) {
+                presentationOpened = false
+            }
+        })*/
+
+        if (presentation.type == "Editor") {
+            if (prevType == "Image" || presentation.index == 0)
+                window.dispose()
+            // else
+            //     frame[presentation.frameIndex].dispose()
+            prevType = "Editor"
             SwingUtilities.invokeLater { TextEditorDemo().isVisible = true }
-            window.dispose()
         } else {
 
             //DemoDialog(e.project, file).show()
             //val window = JFrame()
 
-            val composePanel = ComposePanel().apply {
-                setContent {
-                    preferredSize = Dimension(Toolkit.getDefaultToolkit().screenSize)
-                    App(file)
+            presentationSlidePath.value = File(presentation.slides[presentation.index])
+
+            println(presentation.windowIndex)
+
+            //window.dispose()
+            if (prevType == "Editor" || presentation.index == 0) {
+                prevType = "Image"
+
+                frame.dispose()
+
+                val composePanel = ComposePanel().apply {
+                    setContent {
+                        preferredSize = Dimension(Toolkit.getDefaultToolkit().screenSize)
+                        App()
+                    }
                 }
+
+                window.contentPane.add(composePanel, BorderLayout.CENTER)
+
+                window.defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
+                window.isLocationByPlatform = true
+                window.isVisible = true
+
+                window.extendedState = JFrame.MAXIMIZED_BOTH
+                window.isUndecorated = true
             }
 
-            window.contentPane.add(composePanel, BorderLayout.CENTER)
+            //val currInd = (presentation.windowIndex + 1) % 2
 
-            window.defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
-            window.isLocationByPlatform = true
-            window.isVisible = true
+            //presentation.windowIndex = currInd
 
-            frame.dispose()
-
-            window.extendedState = JFrame.MAXIMIZED_BOTH
-            window.isUndecorated = true
         }
+        //println(presentationOpened)
     }
 }

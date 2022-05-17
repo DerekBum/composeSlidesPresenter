@@ -30,7 +30,7 @@
 
     <actions>
 
-        <action id="com.example.ShowRect" class="com.github.derekbum.composeslidespresenter.ShowSlide"
+        <action id="com.example.ShowRect" class="com.github.derekbum.composeslidespresenter.LoadAllSlides"
                 text="Show Presentation">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
 
@@ -57,4 +57,5 @@
             </action>
     -->
     </actions>
+
 </idea-plugin>

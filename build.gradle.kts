@@ -1,11 +1,11 @@
 import org.jetbrains.compose.compose
 
 plugins {
+    id("org.jetbrains.intellij") version "1.5.2"
+    java
     kotlin("jvm") version "1.6.10"
     id("org.jetbrains.compose") version "1.1.1"
     id("idea")
-    id("org.jetbrains.intellij") version "1.5.2"
-    java
 }
 
 
