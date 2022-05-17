@@ -15,9 +15,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.DumbAwareAction
 import org.fife.ui.rsyntaxtextarea.FileLocation
 import org.fife.ui.rsyntaxtextarea.TextEditorPane
+import org.fife.ui.rtextarea.RTextScrollPane
 import java.awt.*
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
 import java.io.File
 import javax.swing.*
 
@@ -56,14 +55,22 @@ class TextEditorDemo : JFrame() {
         incButton.addActionListener(FontIncAction())
         val decButton = JButton("-")
         decButton.addActionListener(FontDecAction())
+        val saveButton = JButton("save")
+        saveButton.addActionListener(SaveEditorAction())
 
         val buttonPanel = JPanel()
         buttonPanel.layout = FlowLayout(FlowLayout.RIGHT)
         buttonPanel.add(incButton)
         buttonPanel.add(decButton)
+        buttonPanel.add(saveButton)
         cp.add(buttonPanel, BorderLayout.SOUTH)
 
-        cp.add(JScrollPane(textArea))
+        val sp = RTextScrollPane(textArea)
+
+        sp.lineNumbersEnabled = true
+        sp.isFoldIndicatorEnabled = true
+
+        cp.add(sp, BorderLayout.CENTER)
 
         frame.contentPane = cp
         frame.pack()
@@ -76,22 +83,6 @@ class TextEditorDemo : JFrame() {
 
     }
 
-}
-
-private class FontIncAction : ActionListener {
-    override fun actionPerformed(e: ActionEvent) {
-        val font: Font = textArea.font
-        val size: Float = font.size + 1.0f
-        textArea.font = font.deriveFont(size)
-    }
-}
-
-private class FontDecAction : ActionListener {
-    override fun actionPerformed(e: ActionEvent) {
-        val font: Font = textArea.font
-        val size: Float = font.size - 1.0f
-        textArea.font = font.deriveFont(size)
-    }
 }
 
 @Composable
@@ -174,6 +165,7 @@ class ShowSlide: DumbAwareAction() {
             //window.dispose()
             if (prevType == "Editor" || presentation.index == 0) {
                 prevType = "Image"
+
 
                 frame.dispose()
 
