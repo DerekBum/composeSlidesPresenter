@@ -26,14 +26,13 @@ import java.io.File
 import javax.swing.*
 
 
-var window = JFrame()
+//var window = JFrame()
 var frame = JFrame()
 
 private var file: File = File("")
 
 private var prevType = ""
 val textArea = TextEditorPane()
-
 
 class TextEditorDemo : JFrame() {
     init {
@@ -81,6 +80,12 @@ class TextEditorDemo : JFrame() {
 
                     Spacer(modifier = Modifier.weight(1f))
 
+                    Button(onClick = { TODO() }) {
+                        Text(text = "size reset", style = TextStyle(fontSize = 15.sp))
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
+
                     Button(onClick = { fontIncAction() }) {
                         Text(text = "+", style = TextStyle(fontSize = 15.sp))
                     }
@@ -119,18 +124,27 @@ class TextEditorDemo : JFrame() {
         lol.layout = FlowLayout(FlowLayout.RIGHT)
         lol.add(composePanel)*/
 
+        //cp.add(composePanel, BorderLayout.SOUTH)
+
         cp.add(sp, BorderLayout.CENTER)
 
         cp.add(composePanel, BorderLayout.SOUTH)
 
         frame.contentPane = cp
+        //frame.contentPane.add(composePanel, BorderLayout.NORTH)
         frame.pack()
-        frame.defaultCloseOperation = DISPOSE_ON_CLOSE
-        frame.isLocationByPlatform = true
-        frame.isVisible = true
 
-        frame.extendedState = MAXIMIZED_BOTH
-        frame.isUndecorated = true
+        /*frame.defaultCloseOperation = DISPOSE_ON_CLOSE
+        frame.isVisible = true
+        /*if (prevType == "Image" || presentation.index == 0) {
+            frame.isLocationByPlatform = true
+            //prevType = "Editor"
+            //TextEditorDemo().dispose()
+            //frame.isUndecorated = true
+        }*/
+
+        frame.extendedState = MAXIMIZED_BOTH*/
+        //frame.isUndecorated = true
 
     }
 
@@ -197,13 +211,20 @@ class ShowSlide: DumbAwareAction() {
             }
         })*/
 
+        println(prevType)
+
         if (presentation.type == "Editor") {
-            if (prevType == "Image" || presentation.index == 0)
-                window.dispose()
+
+            frame.contentPane.removeAll()
+            //frame.revalidate()
+            frame.repaint()
+
+            prevType = "Editor"
+            SwingUtilities.invokeLater { TextEditorDemo() }
             // else
             //     frame[presentation.frameIndex].dispose()
-            prevType = "Editor"
-            SwingUtilities.invokeLater { TextEditorDemo().isVisible = true }
+            //prevType = "Editor"
+            //SwingUtilities.invokeLater { TextEditorDemo().isVisible = true }
         } else {
 
             //DemoDialog(e.project, file).show()
@@ -215,10 +236,14 @@ class ShowSlide: DumbAwareAction() {
 
             //window.dispose()
             if (prevType == "Editor" || presentation.index == 0) {
+
+                frame.contentPane.removeAll()
+                //frame.revalidate()
+                frame.repaint()
+
+                //window.isUndecorated = true
                 prevType = "Image"
 
-
-                frame.dispose()
 
                 val composePanel = ComposePanel().apply {
                     setContent {
@@ -227,14 +252,24 @@ class ShowSlide: DumbAwareAction() {
                     }
                 }
 
-                window.contentPane.add(composePanel, BorderLayout.CENTER)
+                /*window.contentPane.add(composePanel, BorderLayout.CENTER)
 
                 window.defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
                 window.isLocationByPlatform = true
                 window.isVisible = true
 
-                window.extendedState = JFrame.MAXIMIZED_BOTH
-                window.isUndecorated = true
+                window.extendedState = JFrame.MAXIMIZED_BOTH*/
+
+                frame.contentPane.add(composePanel, BorderLayout.CENTER)
+                frame.pack()
+
+                /*frame.defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
+                frame.isLocationByPlatform = true
+                frame.isVisible = true
+
+                frame.extendedState = JFrame.MAXIMIZED_BOTH*/
+
+                //window.isUndecorated = true
             }
 
             //val currInd = (presentation.windowIndex + 1) % 2

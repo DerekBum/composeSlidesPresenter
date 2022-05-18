@@ -14,8 +14,13 @@ var presentationSlidePath = mutableStateOf(File(""))
 class LoadAllSlides: AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
 
-        window = JFrame()
+        //window = JFrame()
         frame = JFrame()
+        frame.defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
+        frame.isLocationByPlatform = true
+        frame.isVisible = true
+
+        frame.extendedState = JFrame.MAXIMIZED_BOTH
 
         presentation.presentationReader(event)
 
