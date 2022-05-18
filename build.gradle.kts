@@ -26,6 +26,10 @@ intellij {
     plugins.set(listOf(/* Plugin Dependencies */))
 }
 
+sourceSets.test{
+    java.srcDirs("test")
+}
+
 tasks {
     // Set the JVM compatibility versions
     withType<JavaCompile> {
@@ -57,7 +61,11 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 }
 
 dependencies {
+    val junitVersion = "5.6.2"
+
     implementation("com.fifesoft:rsyntaxtextarea:3.2.0")
     implementation(compose.desktop.currentOs)
-    testImplementation("junit", "junit", "4.12")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testImplementation(kotlin("test"))
 }

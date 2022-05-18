@@ -51,16 +51,8 @@ class NextSlideAction: AnAction() {
         if (!presentationOpened)
             presentation.presentationReader(event)
 
-        presentation.index++
-
-        if (presentation.index >= presentation.slides.size) {
-            presentation.index--
+        if (presentation.moveSlide(1) == -1)
             return
-        }
-
-        if (presentation.slides[presentation.index].takeLast(3) == "jpg" || presentation.slides[presentation.index].takeLast(3) == "png")
-            presentation.type = "Image"
-        else presentation.type = "Editor"
 
         println(presentation.type)
 
@@ -80,16 +72,8 @@ class PreviousSlideAction: AnAction() {
         if (!presentationOpened)
             presentation.presentationReader(event)
 
-        presentation.index--
-
-        if (presentation.index < 0) {
-            presentation.index++
+        if (presentation.moveSlide(-1) == -1)
             return
-        }
-
-        if (presentation.slides[presentation.index].takeLast(3) == "jpg" || presentation.slides[presentation.index].takeLast(3) == "png")
-            presentation.type = "Image"
-        else presentation.type = "Editor"
 
         try {
             ShowSlide().actionPerformed(event)
