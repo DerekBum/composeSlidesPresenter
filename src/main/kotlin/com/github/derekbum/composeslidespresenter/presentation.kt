@@ -2,9 +2,7 @@ package com.github.derekbum.composeslidespresenter
 
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
-import com.intellij.util.containers.toArray
 import java.io.File
-import com.intellij.openapi.vfs.*
 
 data class Presentation(
     var slides: Array<String> = emptyArray(),

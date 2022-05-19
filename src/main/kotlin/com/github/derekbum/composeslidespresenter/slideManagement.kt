@@ -14,7 +14,6 @@ var presentationSlidePath = mutableStateOf(File(""))
 class LoadAllSlides: AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
 
-        //window = JFrame()
         frame = JFrame()
         frame.defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
         frame.isLocationByPlatform = true
@@ -29,15 +28,12 @@ class LoadAllSlides: AnAction() {
         for (i in 0 until presentation.slides.size) {
             val file = vf?.findFileByRelativePath(presentation.slides[i])
             presentation.slides[i] = file.toString().removePrefix("file://")
-            println(presentation.slides[i])
         }
 
         presentation.index = 0
         if (presentation.slides[0].takeLast(3) == "jpg" || presentation.slides[0].takeLast(3) == "png")
             presentation.type = "Image"
         else presentation.type = "Editor"
-
-        println(presentation.type)
 
         ShowSlide().actionPerformed(event)
     }
@@ -46,15 +42,11 @@ class LoadAllSlides: AnAction() {
 class NextSlideAction: AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
 
-        //println(presentationOpened)
-
         if (!presentationOpened)
             presentation.presentationReader(event)
 
         if (presentation.moveSlide(1) == -1)
             return
-
-        println(presentation.type)
 
         try {
             ShowSlide().actionPerformed(event)
@@ -66,8 +58,6 @@ class NextSlideAction: AnAction() {
 
 class PreviousSlideAction: AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
-
-        println(presentationOpened)
 
         if (!presentationOpened)
             presentation.presentationReader(event)
