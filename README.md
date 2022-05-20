@@ -1,4 +1,8 @@
 ## Slides presenter plugin
+
+![Test CI](https://github.com/DerekBum/composeSlidesPresenter/actions/workflows/gradle.yml/badge.svg)
+
+
 This is a plugin to show slides and code examples directly from IntelliJ IDEs.
 
 ## Why?
