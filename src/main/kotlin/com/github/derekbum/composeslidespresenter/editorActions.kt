@@ -8,6 +8,10 @@ fun fontIncAction() {
     textArea.font = font.deriveFont(size)
 }
 
+fun fontResetAction() {
+    textArea.font = textArea.font.deriveFont(baseFontSize)
+}
+
 fun fontDecAction() {
     val font: Font = textArea.font
     val size: Float = font.size - 1.0f

@@ -29,6 +29,7 @@ private var file: File = File("")
 
 private var prevType = ""
 val textArea = TextEditorPane()
+const val baseFontSize = 20.0f
 
 class TextEditorDemo : JFrame() {
     init {
@@ -41,6 +42,7 @@ class TextEditorDemo : JFrame() {
         val cp = JPanel()
         textArea.syntaxEditingStyle = getSyntaxStyle(file.extension)
         textArea.tabSize = 4
+        textArea.font = textArea.font.deriveFont(baseFontSize)
         textArea.tabsEmulated = true
         cp.layout = BorderLayout()
 
@@ -62,7 +64,7 @@ class TextEditorDemo : JFrame() {
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Button(onClick = { TODO() }) {
+                    Button(onClick = { fontResetAction() }) {
                         Text(text = "size reset", style = TextStyle(fontSize = 15.sp))
                     }
 
