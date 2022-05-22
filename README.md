@@ -19,6 +19,7 @@ It can be useful if large part of your presentation is based on code examples, s
 3. Edit `slides.txt` so that it contains paths to slides image files and code examples (see format description below).
 4. Use `Next Slide` and `Previous Slide` actions. It's recommended to change default shortcuts to something more convenient (e.g. I use `F12`, `F11`; the only reason for defaults shortcuts `alt-shift-F12`, `alt-shift-F11` is that they don't conflict with other actions).
 5. Always check your presentation in advance on the actual setup.
+6. To enter presentation simply press `Tools -> Show Presentation`.
  
  
 ## Format of slides.txt
