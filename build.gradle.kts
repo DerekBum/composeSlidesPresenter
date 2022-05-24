@@ -30,7 +30,6 @@ dependencies {
     val junitVersion = "5.8.2"
 
     implementation(compose.desktop.currentOs)
-    implementation(compose.desktop.windows_x64)
     implementation("com.fifesoft:rsyntaxtextarea:3.2.0")
     testImplementation(kotlin("test"))
 
@@ -47,18 +46,6 @@ intellij {
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
-}
-
-changelog {
-    version.set(properties("pluginVersion"))
-    groups.set(emptyList())
-}
-
-qodana {
-    cachePath.set(projectDir.resolve(".qodana").canonicalPath)
-    reportPath.set(projectDir.resolve("build/reports/inspections").canonicalPath)
-    saveReport.set(true)
-    showReport.set(System.getenv("QODANA_SHOW_REPORT")?.toBoolean() ?: false)
 }
 
 tasks {
