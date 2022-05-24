@@ -14,14 +14,10 @@ var presentationSlidePath = mutableStateOf(File(""))
 class LoadAllSlides: AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
 
-        frame = JFrame()
-        frame.defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
-        frame.isLocationByPlatform = true
-        frame.isVisible = true
-
-        frame.extendedState = JFrame.MAXIMIZED_BOTH
-
         presentation.presentationReader(event)
+
+        if (presentation.slides.isEmpty())
+            return
 
         val vf = event.getData(PlatformDataKeys.PROJECT_FILE_DIRECTORY)
 
@@ -34,6 +30,13 @@ class LoadAllSlides: AnAction() {
         if (presentation.slides[0].takeLast(3) == "jpg" || presentation.slides[0].takeLast(3) == "png")
             presentation.type = "Image"
         else presentation.type = "Editor"
+
+        frame = JFrame()
+        frame.defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
+        frame.isLocationByPlatform = true
+        frame.isVisible = true
+
+        frame.extendedState = JFrame.MAXIMIZED_BOTH
 
         ShowSlide().actionPerformed(event)
     }
