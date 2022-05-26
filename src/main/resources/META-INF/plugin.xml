@@ -3,7 +3,7 @@
 
     <name>ComposeSlidesPresenter</name>
 
-    <version>0.1</version>
+    <version>0.1.1</version>
 
     <vendor url="https://github.com/DerekBum/composeSlidesPresenter">Alexander Tulchinskiy</vendor>
 
@@ -12,9 +12,9 @@
     See <a href="https://github.com/DerekBum/composeSlidesPresenter">plugin page on GitHub</a> for more details.
   ]]></description>
 
-    <idea-version since-build="211" until-build="213.*"/>
+    <idea-version since-build="211"/>
 
-    <change-notes>Initial release of the plugin.</change-notes>
+    <change-notes>Add IntelliJ multiversion support.</change-notes>
 
     <depends>com.intellij.modules.platform</depends>
 
