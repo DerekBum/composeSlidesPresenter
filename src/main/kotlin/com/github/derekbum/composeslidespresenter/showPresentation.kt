@@ -20,8 +20,6 @@ class ShowSlide: DumbAwareAction() {
         file = File(presentation.slides[presentation.index])
 
         if (presentation.type == "Editor") {
-
-            frame.contentPane.removeAll()
             frame.repaint()
 
             prevType = "Editor"
@@ -31,7 +29,9 @@ class ShowSlide: DumbAwareAction() {
             presentationSlidePath.value = File(presentation.slides[presentation.index])
 
             if (prevType == "Editor" || presentation.index == 0) {
-                frame.contentPane.removeAll()
+                if (presentation.index != 0) {
+                    frame.contentPane.removeAll()
+                }
                 frame.repaint()
 
                 prevType = "Image"
